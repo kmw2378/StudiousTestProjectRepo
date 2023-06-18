@@ -17,6 +17,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import java.nio.charset.StandardCharsets;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -46,6 +48,8 @@ public class KakaoLoginService {
             kakaoTokenResponse = WebClient.create(KakaoLoginConst.TOKEN_URI)
                     .method(HttpMethod.POST)
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                    .header(HttpHeaders.ACCEPT_CHARSET, "utf-8")
+                    .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
                     .body(BodyInserters.fromFormData(params))
                     .retrieve()
                     .bodyToMono(KakaoTokenResponse.class)
