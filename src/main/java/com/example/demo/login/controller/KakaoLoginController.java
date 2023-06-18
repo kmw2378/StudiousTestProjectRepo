@@ -26,7 +26,6 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 @RequiredArgsConstructor
 @RestController
 public class KakaoLoginController {
-
     private final KakaoLoginService kakaoLoginService;
 
     @GetMapping("/login")
@@ -46,12 +45,9 @@ public class KakaoLoginController {
 
     /**
      * 프론트로부터 받은 인가코드를 통해 토큰을 발급받는 메소드
-     * 카카오 로그인 서버에 인가코드, 앱 REST API 키, 리다이렉트 URI를 통해 요청하여 토큰값을 받아온다.
-     * 추후, KakaoLoginService 에 추가될 예정
      * @param code 프론트엔드로 부터 전달받은 인가코드
      * @return KakaoUserTokenResponse 객체
      */
-    @ResponseBody
     @GetMapping("/get-token")
     public KakaoTokenResponse getKakaoToken(@RequestParam String code) {
         log.info("code = {}", code);
