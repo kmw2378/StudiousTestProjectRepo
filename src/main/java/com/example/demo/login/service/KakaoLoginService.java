@@ -1,8 +1,10 @@
 package com.example.demo.login.service;
 
+import com.example.demo.login.dao.KakaoToken;
 import com.example.demo.login.dto.KakaoLoginConst;
 import com.example.demo.login.dto.KakaoTokenRequest;
 import com.example.demo.login.dto.KakaoTokenResponse;
+import com.example.demo.login.repository.KakaoTokenRepository;
 import com.example.demo.login.util.converter.MultiValueMapConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,8 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 @Service
 @RequiredArgsConstructor
 public class KakaoLoginService {
+    private final KakaoTokenRepository kakaoTokenRepository;
+
     /**
      * 프론트로부터 받은 인가코드를 통해 토큰을 발급받는 메소드
      * 카카오 로그인 서버에 인가코드, 앱 REST API 키, 리다이렉트 URI를 통해 요청하여 토큰값을 받아온다.
@@ -47,6 +51,16 @@ public class KakaoLoginService {
                     .retrieve()
                     .bodyToMono(KakaoTokenResponse.class)
                     .block();
+
+            kakaoTokenRepository.save(
+                    KakaoToken.builder()
+                            .accessToken(kakaoTokenResponse.getAccess_token())
+                            .expiresIn(kakaoTokenResponse.getExpires_in())
+                            .refreshToken(kakaoTokenResponse.getRefresh_token())
+                            .refreshTokenExpiresIn(kakaoTokenResponse.getRefresh_token_expires_in())
+                            .build()
+            );
+
         } catch (WebClientResponseException e) {
             log.error("msg = {}", e.getMessage());
             log.error("status = {}", e.getStatusText());
