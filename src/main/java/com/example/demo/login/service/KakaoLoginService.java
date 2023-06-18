@@ -49,7 +49,6 @@ public class KakaoLoginService {
                     .method(HttpMethod.POST)
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                     .header(HttpHeaders.ACCEPT_CHARSET, "utf-8")
-                    .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
                     .body(BodyInserters.fromFormData(params))
                     .retrieve()
                     .bodyToMono(KakaoTokenResponse.class)

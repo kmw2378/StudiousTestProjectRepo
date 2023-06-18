@@ -8,6 +8,7 @@ import com.example.demo.login.dto.token.kakao.KakaoUserTokenResponse;
 import com.example.demo.login.service.KakaoLoginService;
 import com.example.demo.login.util.converter.MultiValueMapConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -49,8 +50,9 @@ public class KakaoLoginController {
      * @return KakaoUserTokenResponse 객체
      */
     @GetMapping("/get-token")
-    public KakaoTokenResponse getKakaoToken(@RequestParam String code) {
+    public KakaoTokenResponse getKakaoToken(@RequestParam String code, HttpServletResponse response) {
         log.info("code = {}", code);
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
         return kakaoLoginService.login(code);
     }
 }
